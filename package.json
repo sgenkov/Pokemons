@@ -1,0 +1,32 @@
+{
+  "name": "pokemons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sgenkov/Pokemons.git"
+  },
+  "author": "Stanimir Genkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sgenkov/Pokemons/issues"
+  },
+  "homepage": "https://github.com/sgenkov/Pokemons#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.1.0",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "pixi.js": "^5.3.3"
+  }
+}
