@@ -1,10 +1,12 @@
 import * as PIXI from 'pixi.js';
-
+import { HeroType } from './HeroType';
+import { gsap } from 'gsap';
 export class Hero {
     
     // _appearance;
+    // static staticProperty = 'someValue';
 
-    constructor(heroStats) {
+    constructor(heroStats, app) {
         console.log('Hero created');
         this.id = heroStats.id - 1;
         this.name = heroStats.name;
@@ -18,17 +20,17 @@ export class Hero {
         this.hitPoints = heroStats.primaryStats.hp;
         this.currentHitPoints = this.hitPoints;
         // this.appearance = { ...Hero.appearancePosition };
-        this.heroType = HeroType.Opponent;
+        // this.heroType = HeroType.Not_selected;
         this.battleMode = false;
-        heroStats.primaryStats.moral = this.moral;
-        this.healthBar = new HealthBar(this.hitPoints, this.currentHitPoints);
-        this.healthBar.type = HeroType.Opponent;
+        // this.healthBar = new HealthBar(this.hitPoints, this.currentHitPoints);
+        // this.healthBar.type = HeroType.Not_selected;
 
         this.sprite_front_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_front_default`].url);
         this.sprite_back_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_back_default`].url);
-        this.
-        this.heroInfo = new HeroInfo(heroStats, app.loader.resources[`${this.name}_front_default`].url);
+        this.sprite = this.sprite_front_default;
+        // this.heroInfo = new HeroInfo(heroStats, app.loader.resources[`${this.name}_front_default`].url);
     };
+    // static _appearancePosition = { x: 0, y: 60 };
 
     attack(victim) {
         const damage = (this.attack / victim.defense) * Math.round(Math.random() * 30); // 200 is too much, isn't it?
@@ -43,17 +45,18 @@ export class Hero {
 
 
     showYourself(
-        xPosition = app.view.width / 2,
-        yPosition = app.view.height / 2,
-        view = SpriteView.sprite_front_default,
+        container,
+        xPosition = container.view.width / 2,
+        yPosition = container.view.height / 2,
+        heroType = HeroType.Not_selected,
         scaleX = 1,
-        scaleY = 1
+        scaleY = 1,
     ) {
-        switch (view) {
-            case SpriteView.sprite_front_default:
+        switch (heroType) {
+            case HeroType.Opponent:
                 this.sprite = this.sprite_front_default;
                 break;
-            case SpriteView.sprite_back_default:
+            case HeroType.Player:
                 this.sprite = this.sprite_back_default;
                 break;
         };
@@ -69,9 +72,10 @@ export class Hero {
         this.sprite.on("pointerdown", () => {
             this.battleMode = true;
             this.heroType = HeroType.Player;
-            this.healthBar.type = HeroType.Player;
-            App.readyForBattle(this);
-            Hero.heroes = Hero.heroes.filter(hero => hero.id !== this.id);
+            console.log('Hero selected from Hero.js r72');
+            // this.healthBar.type = HeroType.Player;
+            // App.readyForBattle(this);
+            // Hero.heroes = Hero.heroes.filter(hero => hero.id !== this.id);
         });
         this.sprite.on("pointerover", () => {
             this.sprite.tint = 0x1AE8EA;
@@ -81,7 +85,7 @@ export class Hero {
             this.sprite.tint = 16777215;
             this.heroInfo.toggleVisible();
         });
-        app.stage.addChild(this.sprite);
+        container.addChild(this.sprite);
     };
 
 
@@ -155,6 +159,53 @@ export class Hero {
     set heroType(type) {
         this.heroType = type;
         this.healthBar.type = type;
+    };
+
+    static async creatureAttackAnimation(creature) {
+        await App.timeline.to(creature.sprite, {
+            x: (creature.heroType === HeroType.Player)
+                ? app.view.width * 17 / 20
+                : app.view.width * 4 / 20,
+            duration: 0.5,
+            repeat: 1,
+            yoyo: true,
+        });
+    };
+
+    static async creatureBlinkAnimation(creature) {
+        await App.timeline.to(creature.sprite, {
+            alpha: 0,
+            duration: 0.1,
+            repeat: 5,
+            yoyo: true,
+        });
+    };
+
+    static previewHeroes(heroes) {
+        console.log('Preview heroes');
+        heroes.forEach(hero => {
+            gsap.to(hero.sprite, {
+                x: hero.appearance.x,
+                y: hero.appearance.y,
+                duration: 1.0,
+                repeat: 0,
+                yoyo: false,
+                rotation: 2 * Math.PI,
+            });
+        })
+    };
+
+    static hideHeroes(heroes) {
+        heroes.forEach(hero => {
+            gsap.to(hero.sprite, {
+                x: Math.random() * app.view.width,
+                y: Math.random() * app.view.height + app.view.height + 100,
+                duration: 1.0,
+                repeat: 0,
+                yoyo: false,
+                rotation: 2 * Math.PI,
+            });
+        });
     };
 
 };

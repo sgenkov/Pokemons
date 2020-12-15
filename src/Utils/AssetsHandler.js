@@ -1,17 +1,16 @@
 export class AssetsHandler {
     //  static heroesData;
-     static async loadAssets(app, heroesData) {
+     constructor(app, heroesData) {
         // AssetsHandler.heroesData = heroesData;
-        await heroesData.forEach((hero) => {
+        heroesData.forEach((hero) => {
             app.loader
                 .add(`${hero.name}_front_default`, hero.sprites.front_default)
                 .add(`${hero.name}_back_default`, hero.sprites.back_default)
         });
-
         app.loader.onProgress.add(this.showProgress);
         // app.loader.onComplete.add(() => new App(app, resources));
         app.loader.onError.add(this.reportError);
-        await app.loader.load();
+        app.loader.load();
         app.stage.interactive = true;
     };
 
@@ -19,10 +18,10 @@ export class AssetsHandler {
     //     new App();
     // };
 
-     static showProgress(e) {
+    showProgress(e) {
         console.log(e.progress);
     };
-     static reportError(e) {
+    reportError(e) {
         console.log('ERROR : ' + e.message);
     };
 };
