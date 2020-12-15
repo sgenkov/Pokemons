@@ -32,12 +32,13 @@ export class Hero {
     };
     
 
-    attack(victim) {
-        const damage = (this.attack / victim.defense) * Math.round(Math.random() * 30); // 200 is too much, isn't it?
-
+    attackEnemy(victim) {
+        const damage = Math.round((this.attack / victim.defense) * Math.round(Math.random() * 30)); // 200 is too much, isn't it?
+        
         (damage > 0) && (victim.currentHitPoints -= damage);
-        victim.healthBar.updateHitpoints(victim.currentHitPoints);
-        App.hitSound.play();
+        console.log(`${this.name} deals ${damage} damage`);
+        // victim.healthBar.updateHitpoints(victim.currentHitPoints);
+        // App.hitSound.play();
         return damage;
     };
 
@@ -125,19 +126,19 @@ export class Hero {
         Hero.appearancePosition.x += app.view.width / 11;
         return Hero.appearancePosition;
     };
-    static async creatureAttackAnimation(creature) {
-        await App.timeline.to(creature.sprite, {
+    static async creatureAttackAnimation(creature, timeline, app) {
+        await timeline.to(creature.sprite, {
             x: (creature.heroType === HeroType.Player)
-                ? ref.app.view.width * 17 / 20
-                : ref.app.view.width * 4 / 20,
+                ? app.view.width * 17 / 20
+                : app.view.width * 4 / 20,
             duration: 0.5,
             repeat: 1,
             yoyo: true,
         });
     };
 
-    static async creatureBlinkAnimation(creature) {
-        await App.timeline.to(creature.sprite, {
+    static async creatureBlinkAnimation(creature, timeline) {
+        await timeline.to(creature.sprite, {
             alpha: 0,
             duration: 0.1,
             repeat: 5,
@@ -159,7 +160,7 @@ export class Hero {
         })
     };
 
-    static hideHeroes(ref) {
+    static async hideHeroes(ref) {
         console.log('Hide Heroes');
         ref.heroes.forEach(hero => {
             gsap.to(hero.sprite, {
