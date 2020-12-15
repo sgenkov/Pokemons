@@ -12,11 +12,11 @@ export class App {
     constructor(app, resources) {
         console.log('App created');
         document.body.appendChild(app.view);
+        this.app = app;
         this.selectHeroScreen = new SelectHeroScreen(app);
         this.battleScreen = new BattleScreen(app);
-        console.log('selectHeroScreen', this.selectHeroScreen);
 
-        this.heroes = resources.map(hero => new Hero(Hero.getHeroStats(hero), app, this));
+        this.heroes = resources.map(hero => new Hero(Hero.getHeroStats(hero), this));
         // this.heroes.forEach(hero => app.stage.addChild(hero.sprite))
 
         this.soundProvider = new SoundProvider();

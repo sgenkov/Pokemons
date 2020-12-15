@@ -5,7 +5,7 @@ import { HeroInfo } from './HeroInfo';
 export class Hero {
     static appearancePosition = { x: 0, y: 60 };
 
-    constructor(heroStats, app, ref) {
+    constructor(heroStats, ref) {
         console.log('Hero created');
         this.id = heroStats.id - 1;
         this.name = heroStats.name;
@@ -18,16 +18,16 @@ export class Hero {
         this.attack = heroStats.primaryStats.attack;
         this.hitPoints = heroStats.primaryStats.hp;
         this.currentHitPoints = this.hitPoints;
-        this.appearance = { ...Hero.getAppearancePosition(app)};
+        this.appearance = { ...Hero.getAppearancePosition(ref.app)};
         this.heroType = HeroType.Not_selected;
         this.battleMode = false;
         // this.healthBar = new HealthBar(this.hitPoints, this.currentHitPoints);
         // this.healthBar.type = HeroType.Not_selected;
 
-        this.sprite_front_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_front_default`].url);
-        this.sprite_back_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_back_default`].url);
+        this.sprite_front_default = PIXI.Sprite.from(ref.app.loader.resources[`${this.name}_front_default`].url);
+        this.sprite_back_default = PIXI.Sprite.from(ref.app.loader.resources[`${this.name}_back_default`].url);
         this.sprite = this.sprite_front_default;
-        this.heroInfo = new HeroInfo(heroStats, app, ref);
+        this.heroInfo = new HeroInfo(heroStats, ref);
     };
     
 
@@ -71,7 +71,7 @@ export class Hero {
         this.sprite.on("pointerdown", () => {
             this.battleMode = true;
             this.heroType = HeroType.Player;
-            console.log('Hero selected from Hero.js r72');
+            console.log('Hero selected from Hero.js r72', this.name);
             // this.healthBar.type = HeroType.Player;
             // App.readyForBattle(this);
             // Hero.heroes = Hero.heroes.filter(hero => hero.id !== this.id);
@@ -93,11 +93,11 @@ export class Hero {
         if (this.battleMode) {
             if (this.heroType === HeroType.Player) {
                 this.sprite = this.sprite_back_default;
-                this.sprite.x = app.view.width / 9;
-                this.sprite.y = app.view.height / 2;
+                this.sprite.x = ref.app.view.width / 9;
+                this.sprite.y = ref.app.view.height / 2;
             } else if (this.heroType === HeroType.Opponent) {
-                this.sprite.x = app.view.width * 9 / 10;
-                this.sprite.y = app.view.height / 2;
+                this.sprite.x = ref.app.view.width * 9 / 10;
+                this.sprite.y = ref.app.view.height / 2;
             }
             this.sprite.anchor.set(0.5);
             this.sprite.scale.x = 3.4;
@@ -156,8 +156,8 @@ export class Hero {
     static async creatureAttackAnimation(creature) {
         await App.timeline.to(creature.sprite, {
             x: (creature.heroType === HeroType.Player)
-                ? app.view.width * 17 / 20
-                : app.view.width * 4 / 20,
+                ? ref.app.view.width * 17 / 20
+                : ref.app.view.width * 4 / 20,
             duration: 0.5,
             repeat: 1,
             yoyo: true,
@@ -190,8 +190,8 @@ export class Hero {
     static hideHeroes(heroes) {
         heroes.forEach(hero => {
             gsap.to(hero.sprite, {
-                x: Math.random() * app.view.width,
-                y: Math.random() * app.view.height + app.view.height + 100,
+                x: Math.random() * ref.app.view.width,
+                y: Math.random() * ref.app.view.height + ref.app.view.height + 100,
                 duration: 1.0,
                 repeat: 0,
                 yoyo: false,

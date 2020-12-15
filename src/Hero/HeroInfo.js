@@ -1,15 +1,15 @@
 import * as PIXI from 'pixi.js';
 export class HeroInfo {
-    constructor(heroInfo, app, ref) {
-        console.log(ref.selectHeroScreen);
-        console.log('ref : ', ref);
-        this.sprite = PIXI.Sprite.from(app.loader.resources[`${heroInfo.name}_front_default`].url);
+    constructor(heroInfo, ref) {
+        // console.log(ref.selectHeroScreen);
+        // console.log('ref : ', ref);
+        this.sprite = PIXI.Sprite.from(ref.app.loader.resources[`${heroInfo.name}_front_default`].url);
         this.sprite.scale.x = 4;
         this.sprite.scale.y = 4;
-        this.sprite.x = app.view.width / 3;
-        this.sprite.y = app.view.height / 1.8;
+        this.sprite.x = ref.app.view.width / 3;
+        this.sprite.y = ref.app.view.height / 1.8;
         this.sprite.anchor.set(0.5);
-        this.sprite.visible = this._isVisible;
+        this.sprite.visible = false;
         ref.selectHeroScreen.addChild(this.sprite);
 
         this.info = new PIXI.Text(
@@ -26,8 +26,8 @@ export class HeroInfo {
         Attack: ${heroInfo.primaryStats.attack}
         HP: ${heroInfo.primaryStats.hp}
         Moral: ${heroInfo.primaryStats.moral}`);
-        this.info.x = app.view.width / 1.8;
-        this.info.y = app.view.height / 1.8;
+        this.info.x = ref.app.view.width / 1.8;
+        this.info.y = ref.app.view.height / 1.8;
         this.info.anchor.set(0.5);
         this.info.visible = this._isVisible;
         ref.selectHeroScreen.addChild(this.info);
