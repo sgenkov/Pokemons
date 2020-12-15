@@ -7,6 +7,7 @@ export class Hero {
 
     constructor(heroStats, ref) {
         console.log('Hero created');
+        this.ref = ref;
         this.id = heroStats.id - 1;
         this.name = heroStats.name;
         this.ability = heroStats.ability;
@@ -72,6 +73,9 @@ export class Hero {
             this.battleMode = true;
             this.heroType = HeroType.Player;
             console.log('Hero selected from Hero.js r72', this.name);
+            Hero.hideHeroes();
+            // const heroes = this;
+            // console.log('heroes', heroes);
             // this.healthBar.type = HeroType.Player;
             // App.readyForBattle(this);
             // Hero.heroes = Hero.heroes.filter(hero => hero.id !== this.id);
@@ -87,7 +91,9 @@ export class Hero {
         container.addChild(this.sprite);
     };
 
+    // handleSelect(this.ref) {
 
+    // }
     setBattleMode(mode) {
         this.battleMode = mode;
         if (this.battleMode) {
@@ -111,15 +117,6 @@ export class Hero {
             this.sprite.scale.y = 1;
             this.sprite.visible = true;
         };
-    };
-
-
-    static createHeroes(heroesData) {
-        Hero.heroes = [];
-        heroesData.map((hero) => {
-            Hero.heroes.push(new Hero(this.getHeroStats(hero)));
-        });
-        // Hero.appearancePosition = { x: 0, y: 60 };
     };
 
     static getHeroStats(heroFullStack) {
@@ -187,11 +184,12 @@ export class Hero {
         })
     };
 
-    static hideHeroes(heroes) {
+    static hideHeroes(heroes, app) {
+        console.log(heroes, app);
         heroes.forEach(hero => {
             gsap.to(hero.sprite, {
-                x: Math.random() * ref.app.view.width,
-                y: Math.random() * ref.app.view.height + ref.app.view.height + 100,
+                x: Math.random() * app.view.width,
+                y: Math.random() * app.view.height + app.view.height + 100,
                 duration: 1.0,
                 repeat: 0,
                 yoyo: false,
