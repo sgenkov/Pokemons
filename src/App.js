@@ -22,20 +22,14 @@ export class App {
         // this.soundProvider.mainMenu.play();              ==========================================UNCOMMENT THIS AT DEPLOY
         this.timeline = gsap.timeline();
         this.init(app);
-        console.log('Hero screen', this.selectHeroScreen);
     };
 
     async init(app) {
-        console.log('Test 1');
         await this.heroes.forEach(hero => {
             hero.showYourself(this.selectHeroScreen, Math.random() * app.view.width, Math.random() * app.view.height);
         });
-        console.log('Test 2');
-        // AnimationsProvider.previewHeroes();
         app.stage.addChild(this.selectHeroScreen);
-        console.log('Test 3');
         app.ticker.start();
-        console.log('Test 4');
         Hero.previewHeroes(this.heroes);
     };
 

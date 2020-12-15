@@ -1,11 +1,13 @@
+import * as PIXI from 'pixi.js';
 export class HeroInfo {
     _isVisible = false;
     sprite;
     stats;
     info;
 
-    constructor(heroInfo, texture) {
-        this.sprite = PIXI.Sprite.from(texture);
+    constructor(heroInfo, app) {
+        console.log('HeroInfo created');
+        this.sprite = PIXI.Sprite.from(app.loader.resources[`${heroInfo.name}_front_default`].url);
         this.sprite.scale.x = 4;
         this.sprite.scale.y = 4;
         this.sprite.x = app.view.width / 3;
@@ -36,8 +38,8 @@ export class HeroInfo {
     };
 
     toggleVisible() {
-        this._isVisible = !this._isVisible;
-        this.sprite.visible = this._isVisible;
-        this.info.visible = this._isVisible;
+        this.isVisible = !this.isVisible;
+        this.sprite.visible = this.isVisible;
+        this.info.visible = this.isVisible;
     };
 };

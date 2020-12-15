@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { HeroType } from './HeroType';
 import { gsap } from 'gsap';
+import { HeroInfo } from './HeroInfo';
 export class Hero {
-    
-    // _appearance;
-    // static staticProperty = 'someValue';
+    static appearancePosition = { x: 0, y: 60 };
 
     constructor(heroStats, app) {
         console.log('Hero created');
@@ -19,8 +18,8 @@ export class Hero {
         this.attack = heroStats.primaryStats.attack;
         this.hitPoints = heroStats.primaryStats.hp;
         this.currentHitPoints = this.hitPoints;
-        // this.appearance = { ...Hero.appearancePosition };
-        // this.heroType = HeroType.Not_selected;
+        this.appearance = { ...Hero.getAppearancePosition(app)};
+        this.heroType = HeroType.Not_selected;
         this.battleMode = false;
         // this.healthBar = new HealthBar(this.hitPoints, this.currentHitPoints);
         // this.healthBar.type = HeroType.Not_selected;
@@ -28,9 +27,9 @@ export class Hero {
         this.sprite_front_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_front_default`].url);
         this.sprite_back_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_back_default`].url);
         this.sprite = this.sprite_front_default;
-        // this.heroInfo = new HeroInfo(heroStats, app.loader.resources[`${this.name}_front_default`].url);
+        this.heroInfo = new HeroInfo(heroStats, app);
     };
-    // static _appearancePosition = { x: 0, y: 60 };
+    
 
     attack(victim) {
         const damage = (this.attack / victim.defense) * Math.round(Math.random() * 30); // 200 is too much, isn't it?
@@ -120,7 +119,7 @@ export class Hero {
         heroesData.map((hero) => {
             Hero.heroes.push(new Hero(this.getHeroStats(hero)));
         });
-        Hero.appearancePosition = { x: 0, y: 60 };
+        // Hero.appearancePosition = { x: 0, y: 60 };
     };
 
     static getHeroStats(heroFullStack) {
@@ -146,21 +145,14 @@ export class Hero {
         };
     };
 
-    static get appearancePosition() {
+    static getAppearancePosition(app) {
         if (Hero.appearancePosition.x > app.view.width * 18 / 20) {//* 9 / 10
             Hero.appearancePosition.x = 0;
             Hero.appearancePosition.y += app.view.height * 3 / 20   //+= 100;
         };
         Hero.appearancePosition.x += app.view.width / 11;
-
         return Hero.appearancePosition;
     };
-
-    set heroType(type) {
-        this.heroType = type;
-        this.healthBar.type = type;
-    };
-
     static async creatureAttackAnimation(creature) {
         await App.timeline.to(creature.sprite, {
             x: (creature.heroType === HeroType.Player)
@@ -185,8 +177,8 @@ export class Hero {
         console.log('Preview heroes');
         heroes.forEach(hero => {
             gsap.to(hero.sprite, {
-                x: hero.appearance.x,
-                y: hero.appearance.y,
+                x: Math.floor(hero.appearance.x),
+                y:  Math.floor(hero.appearance.y),
                 duration: 1.0,
                 repeat: 0,
                 yoyo: false,
