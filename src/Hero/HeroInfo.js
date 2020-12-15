@@ -1,12 +1,8 @@
 import * as PIXI from 'pixi.js';
 export class HeroInfo {
-    _isVisible = false;
-    sprite;
-    stats;
-    info;
-
-    constructor(heroInfo, app) {
-        console.log('HeroInfo created');
+    constructor(heroInfo, app, ref) {
+        console.log(ref.selectHeroScreen);
+        console.log('ref : ', ref);
         this.sprite = PIXI.Sprite.from(app.loader.resources[`${heroInfo.name}_front_default`].url);
         this.sprite.scale.x = 4;
         this.sprite.scale.y = 4;
@@ -14,7 +10,7 @@ export class HeroInfo {
         this.sprite.y = app.view.height / 1.8;
         this.sprite.anchor.set(0.5);
         this.sprite.visible = this._isVisible;
-        app.stage.addChild(this.sprite);
+        ref.selectHeroScreen.addChild(this.sprite);
 
         this.info = new PIXI.Text(
             `        Name: ${heroInfo.name}
@@ -34,7 +30,7 @@ export class HeroInfo {
         this.info.y = app.view.height / 1.8;
         this.info.anchor.set(0.5);
         this.info.visible = this._isVisible;
-        app.stage.addChild(this.info);
+        ref.selectHeroScreen.addChild(this.info);
     };
 
     toggleVisible() {

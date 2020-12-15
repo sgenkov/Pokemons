@@ -14,8 +14,9 @@ export class App {
         document.body.appendChild(app.view);
         this.selectHeroScreen = new SelectHeroScreen(app);
         this.battleScreen = new BattleScreen(app);
+        console.log('selectHeroScreen', this.selectHeroScreen);
 
-        this.heroes = resources.map(hero => new Hero(Hero.getHeroStats(hero), app));
+        this.heroes = resources.map(hero => new Hero(Hero.getHeroStats(hero), app, this));
         // this.heroes.forEach(hero => app.stage.addChild(hero.sprite))
 
         this.soundProvider = new SoundProvider();

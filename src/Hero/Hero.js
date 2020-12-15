@@ -5,7 +5,7 @@ import { HeroInfo } from './HeroInfo';
 export class Hero {
     static appearancePosition = { x: 0, y: 60 };
 
-    constructor(heroStats, app) {
+    constructor(heroStats, app, ref) {
         console.log('Hero created');
         this.id = heroStats.id - 1;
         this.name = heroStats.name;
@@ -27,7 +27,7 @@ export class Hero {
         this.sprite_front_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_front_default`].url);
         this.sprite_back_default = PIXI.Sprite.from(app.loader.resources[`${this.name}_back_default`].url);
         this.sprite = this.sprite_front_default;
-        this.heroInfo = new HeroInfo(heroStats, app);
+        this.heroInfo = new HeroInfo(heroStats, app, ref);
     };
     
 
