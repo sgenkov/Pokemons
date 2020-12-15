@@ -32,7 +32,7 @@ export class App {
         app.stage.addChild(this.selectHeroScreen);
         app.ticker.start();
         Hero.previewHeroes(this.heroes);
-        // Hero.hideHeroes(this.heroes, app);
+        
     };
 
 };
