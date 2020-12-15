@@ -41,9 +41,6 @@ export class Hero {
         return damage;
     };
 
-
-
-
     showYourself(
         container,
         xPosition = container.view.width / 2,
@@ -69,39 +66,19 @@ export class Hero {
         this.sprite.buttonMode = true;
         this.sprite.interactive = true;
 
-        this.sprite.on("pointerdown", () => {
-            this.battleMode = true;
-            this.heroType = HeroType.Player;
-            console.log('Hero selected from Hero.js r72', this.name);
-            this.handleSelect();
-            // this.healthBar.type = HeroType.Player;
-            // App.readyForBattle(this);
-            // Hero.heroes = Hero.heroes.filter(hero => hero.id !== this.id);
-        });
-        this.sprite.on("pointerover", () => {
-            this.sprite.tint = 0x1AE8EA;
-            this.heroInfo.toggleVisible();
-        });
-        this.sprite.on("pointerout", () => {
-            this.sprite.tint = 16777215;
-            this.heroInfo.toggleVisible();
-        });
         container.addChild(this.sprite);
     };
 
-     async handleSelect() {
-        Hero.hideHeroes(this.ref);
-    }
     setBattleMode(mode) {
         this.battleMode = mode;
         if (this.battleMode) {
             if (this.heroType === HeroType.Player) {
                 this.sprite = this.sprite_back_default;
-                this.sprite.x = ref.app.view.width / 9;
-                this.sprite.y = ref.app.view.height / 2;
+                this.sprite.x = this.ref.app.view.width / 9;
+                this.sprite.y = this.ref.app.view.height / 2;
             } else if (this.heroType === HeroType.Opponent) {
-                this.sprite.x = ref.app.view.width * 9 / 10;
-                this.sprite.y = ref.app.view.height / 2;
+                this.sprite.x = this.ref.app.view.width * 9 / 10;
+                this.sprite.y = this.ref.app.view.height / 2;
             }
             this.sprite.anchor.set(0.5);
             this.sprite.scale.x = 3.4;
@@ -183,6 +160,7 @@ export class Hero {
     };
 
     static hideHeroes(ref) {
+        console.log('Hide Heroes');
         ref.heroes.forEach(hero => {
             gsap.to(hero.sprite, {
                 x: Math.random() * ref.app.view.width,
