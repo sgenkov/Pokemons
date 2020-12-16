@@ -12,9 +12,6 @@ const app = new PIXI.Application({
 let resources;
 (async () => {
     resources = await ResourcesProvider.fetchUnits();
-    // console.log('res type: ', typeof resources);
-    // console.log('resources', resources);
-    // console.log('app', app);
     new AssetsHandler(app, resources);
     app.loader.onComplete.add(() => new App(app, resources));
 })();

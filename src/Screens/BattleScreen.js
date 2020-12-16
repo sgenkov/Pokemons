@@ -4,6 +4,16 @@ export class BattleScreen extends PIXI.Container {
         super();
         this.width = app.view.width;
         this.height = app.view.height;
+        this.background = new PIXI.Sprite.from(app.loader.resources['battleBackground'].url);
+        this.background.scale.x = app.view.width / 290;
+        this.background.scale.y = app.view.height / 162;
+        this.addChild(this.background);
+    };
+
+    clearContainer() {
+        while(this.children.length > 1) {
+            this.children.pop();
+        };
     };
 
 };

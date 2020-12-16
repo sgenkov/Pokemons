@@ -1,10 +1,8 @@
 import * as PIXI from 'pixi.js';
 export class Button {
-    
     constructor(app, container) {
         this.container = container;
         this.button = new PIXI.Graphics();
-        // App.battleSound.stop();
         this.button.beginFill(0xff0000);
         this.button.lineStyle(5, 0x00ff00);
         this.button.drawRect(app.view.width / 2 - 90, app.view.height / 2 - 40, 180, 80);
@@ -12,9 +10,6 @@ export class Button {
 
         this.button.buttonMode = true;
         this.button.interactive = true;
-        // this.button.on("pointerdown", () => {
-        //     App.newGame();
-        // });
 
         this.text = new PIXI.Text("New Game", {
             fontSize: 30,
@@ -32,8 +27,4 @@ export class Button {
         container.addChild(this.text);
     };
 
-     removeButton() {
-        this.container.removeChild(this.button);
-        this.container.removeChild(this.text);
-    };
 };

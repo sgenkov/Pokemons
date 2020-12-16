@@ -1,7 +1,3 @@
-import { BlurFilter } from '@pixi/filter-blur';
-import { Container } from '@pixi/display';
-import { Graphics } from '@pixi/graphics';
-import { Sprite } from '@pixi/sprite';
 import * as PIXI from 'pixi.js';
 import { Hero } from './Hero/Hero';
 import { SoundProvider } from './Utils/SoundProvider';
@@ -13,7 +9,6 @@ import { Button } from './Utils/Button';
 
 export class App {
     constructor(app, resources) {
-        console.log('App created');
         document.body.appendChild(app.view);
         this.app = app;
         this.resources = resources;
@@ -32,42 +27,37 @@ export class App {
         this.winnerText.position.y = app.view.height / 3;
         this.winnerText.anchor.set(0.5);
         this.heroes = resources.map(hero => new Hero(Hero.getHeroStats(hero), this));
-        // this.heroes.forEach(hero => app.stage.addChild(hero.sprite))
 
         this.soundProvider = new SoundProvider();
-        this.soundProvider.mainMenu.play();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+        this.soundProvider.mainMenu.play();
         this.timeline = gsap.timeline();
         this.init(app);
     };
 
     newGame() {
-        console.log('New Game');
-        this.soundProvider.mainMenu.play();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+        this.soundProvider.mainMenu.play();
         this.battleScreen.visible = false;
         this.selectHeroScreen.visible = true;
         Hero.appearancePosition = { x: 0, y: 60 };
-        this.battleScreen.children = [];
-        this.selectHeroScreen.children = [];
+        this.battleScreen.clearContainer();
+        this.selectHeroScreen.clearContainer();
         this.heroes = this.resources.map(hero => new Hero(Hero.getHeroStats(hero), this));
-        console.log(this.battleScreen);
         this.init(this.app);
     };
     async battle() {
         const sequnce = this.determineSequence();
         const fasterCreature = sequnce[0];
         const slowerCreature = sequnce[1];
-        console.log(`fasterCreature : ${fasterCreature.name}`);
-        console.log(`slowerCreature : ${slowerCreature.name}`);
-        await this.battleScreen.addChild(fasterCreature.sprite);
-        await this.battleScreen.addChild(slowerCreature.sprite);
-        // fasterCreature.healthBar.toggleBar(true);
-        // slowerCreature.healthBar.toggleBar(true);
+        this.battleScreen.addChild(fasterCreature.sprite);
+        this.battleScreen.addChild(slowerCreature.sprite);
+        this.battleScreen.addChild(fasterCreature.healthBar.bar); 
+        this.battleScreen.addChild(slowerCreature.healthBar.bar);
 
 
         while (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
             if (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
                 await Hero.creatureAttackAnimation(fasterCreature, this.timeline, this.app);
-                this.soundProvider.hitSound.play();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+                this.soundProvider.hitSound.play(); 
             } else {
                 break;
             };
@@ -81,7 +71,7 @@ export class App {
 
             if (slowerCreature.currentHitPoints > 0 && fasterCreature.currentHitPoints > 0) {
                 await Hero.creatureAttackAnimation(slowerCreature, this.timeline, this.app);
-                this.soundProvider.hitSound.play();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+                this.soundProvider.hitSound.play(); 
             } else {
                 break;
             };
@@ -94,23 +84,22 @@ export class App {
             };
         };
         if (fasterCreature.currentHitPoints <= 0) {
-            this.soundProvider.battleSound.stop();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+            this.soundProvider.battleSound.stop(); 
             fasterCreature.sprite.tint = 0x000000;
             this.winner = this.determineWinner(slowerCreature);
         };
         if (slowerCreature.currentHitPoints <= 0) {
-            this.soundProvider.battleSound.stop();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+            this.soundProvider.battleSound.stop();
             slowerCreature.sprite.tint = 0x000000;
             this.winner = this.determineWinner(fasterCreature);
         };
 
         this.winnerText.text = this.winner;
         this.battleScreen.addChild(this.winnerText);
-        // app.stage.addChild(App.text);
         if(this.winner === 'You Win') {
-            this.soundProvider.winBattle.play();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+            this.soundProvider.winBattle.play(); 
         } else {
-            this.soundProvider.loseBattle.play();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+            this.soundProvider.loseBattle.play(); 
         };
 
         this.button = new Button(this.app, this.battleScreen);
@@ -132,14 +121,6 @@ export class App {
         };
         return sequence;
     };
-
-
-
-
-
-
-
-
     selectOpponent() {
         let id = Math.random() * 19;
         this.opponentHero = this.heroes[Math.floor(id)];
@@ -148,12 +129,8 @@ export class App {
     };
 
     readyForBattle() {
-        console.log('Ready for battle');
-        
         this.heroes = this.heroes.filter(hero => hero.heroType !== HeroType.Player);
         this.selectOpponent();
-        console.log(`PLayer Hero : ${this.playerHero.name}`);
-        console.log(`Opponent Hero : ${this.opponentHero.name}`);
         this.selectHeroScreen.visible = false;
         this.battleScreen.visible = true;
         this.battle()
@@ -167,17 +144,15 @@ export class App {
         Hero.previewHeroes(this.heroes);
         this.heroes.forEach((hero) => {
             hero.sprite.on("pointerdown", () => {
-                this.soundProvider.mainMenu.stop();   //           ==========================================UNCOMMENT THIS AT DEPLOY
-                this.soundProvider.battleSound.play();   //           ==========================================UNCOMMENT THIS AT DEPLOY
+                this.soundProvider.mainMenu.stop();  
+                this.soundProvider.battleSound.play();  
                 Hero.hideHeroes(this);
                 this.playerHero = hero;
                 this.playerHero.heroType = HeroType.Player;
                 this.playerHero.setBattleMode(true);
-                // this.healthBar.type = HeroType.Player;
                 setTimeout(() => {
-
                     this.readyForBattle();
-                }, 2000);
+                }, 1500);
             });
             hero.sprite.on("pointerover", () => {
                 hero.sprite.tint = 0x1AE8EA;

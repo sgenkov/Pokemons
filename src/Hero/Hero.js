@@ -2,11 +2,12 @@ import * as PIXI from 'pixi.js';
 import { HeroType } from './HeroType';
 import { gsap } from 'gsap';
 import { HeroInfo } from './HeroInfo';
+import { HealthBar } from './HealthBar';
+
 export class Hero {
     static appearancePosition = { x: 0, y: 60 };
 
     constructor(heroStats, ref) {
-        console.log('Hero created');
         this.ref = ref;
         this.id = heroStats.id - 1;
         this.name = heroStats.name;
@@ -22,9 +23,8 @@ export class Hero {
         this.appearance = { ...Hero.getAppearancePosition(ref.app)};
         this.heroType = HeroType.Not_selected;
         this.battleMode = false;
-        // this.healthBar = new HealthBar(this.hitPoints, this.currentHitPoints);
-        // this.healthBar.type = HeroType.Not_selected;
-
+        this.healthBar = new HealthBar(this.hitPoints, this.currentHitPoints, ref);
+        
         this.sprite_front_default = PIXI.Sprite.from(ref.app.loader.resources[`${this.name}_front_default`].url);
         this.sprite_back_default = PIXI.Sprite.from(ref.app.loader.resources[`${this.name}_back_default`].url);
         this.sprite = this.sprite_front_default;
@@ -33,12 +33,10 @@ export class Hero {
     
 
     attackEnemy(victim) {
-        const damage = Math.round((this.attack / victim.defense) * Math.round(Math.random() * 30)); // 200 is too much, isn't it?
+        const damage = Math.round((this.attack / victim.defense) * Math.round(Math.random() * 42)); // 200 is too much, isn't it?
         
         (damage > 0) && (victim.currentHitPoints -= damage);
-        console.log(`${this.name} deals ${damage} damage`);
-        // victim.healthBar.updateHitpoints(victim.currentHitPoints);
-        // App.hitSound.play();
+        victim.healthBar.updateHitpoints(victim.currentHitPoints);
         return damage;
     };
 
@@ -74,16 +72,18 @@ export class Hero {
         this.battleMode = mode;
         if (this.battleMode) {
             if (this.heroType === HeroType.Player) {
+                this.healthBar.setType(HeroType.Player);
                 this.sprite = this.sprite_back_default;
                 this.sprite.x = this.ref.app.view.width / 9;
                 this.sprite.y = this.ref.app.view.height / 2;
             } else if (this.heroType === HeroType.Opponent) {
+                this.healthBar.setType(HeroType.Opponent);
                 this.sprite.x = this.ref.app.view.width * 9 / 10;
                 this.sprite.y = this.ref.app.view.height / 2;
             }
             this.sprite.anchor.set(0.5);
-            this.sprite.scale.x = 3.4;
-            this.sprite.scale.y = 3.4;
+            this.sprite.scale.x = 3.2;
+            this.sprite.scale.y = 3.2;
             this.sprite.buttonMode = false;
             this.sprite.interactive = false;
             this.sprite.visible = true;
@@ -119,9 +119,9 @@ export class Hero {
     };
 
     static getAppearancePosition(app) {
-        if (Hero.appearancePosition.x > app.view.width * 18 / 20) {//* 9 / 10
+        if (Hero.appearancePosition.x > app.view.width * 18 / 20) {
             Hero.appearancePosition.x = 0;
-            Hero.appearancePosition.y += app.view.height * 3 / 20   //+= 100;
+            Hero.appearancePosition.y += app.view.height * 3 / 20;
         };
         Hero.appearancePosition.x += app.view.width / 11;
         return Hero.appearancePosition;
@@ -147,7 +147,6 @@ export class Hero {
     };
 
     static previewHeroes(heroes) {
-        console.log('Preview heroes');
         heroes.forEach(hero => {
             gsap.to(hero.sprite, {
                 x: Math.floor(hero.appearance.x),
@@ -161,7 +160,6 @@ export class Hero {
     };
 
     static async hideHeroes(ref) {
-        console.log('Hide Heroes');
         ref.heroes.forEach(hero => {
             gsap.to(hero.sprite, {
                 x: Math.random() * ref.app.view.width,

@@ -1,8 +1,6 @@
 import * as PIXI from 'pixi.js';
 export class HeroInfo {
     constructor(heroInfo, ref) {
-        // console.log(ref.selectHeroScreen);
-        // console.log('ref : ', ref);
         this.sprite = PIXI.Sprite.from(ref.app.loader.resources[`${heroInfo.name}_front_default`].url);
         this.sprite.scale.x = 4;
         this.sprite.scale.y = 4;
