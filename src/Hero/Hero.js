@@ -35,7 +35,7 @@ export class Hero {
     
 
     attackEnemy(victim) {
-        const damage = Math.round((this.attack / victim.defense) * Math.round(Math.random() * 42)); // 200 is too much, isn't it?
+        const damage = Math.round((this.attack / victim.defense) * Math.round(Math.random() * 100)); // 200 is too much, isn't it?
         
         (damage > 0) && (victim.currentHitPoints -= damage);
         victim.healthBar.updateHitpoints(victim.currentHitPoints);

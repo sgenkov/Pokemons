@@ -23,11 +23,20 @@ export class HealthBar {
     };
 
     async updateHitpoints(value) {
-        this.createHpBar(this.currentHitPoints, this.hitPoints, 0xFF0000);
+        this.createHpBar(this.currentHitPoints, this.hitPoints, 0x0050FF);
         this.currentHitPoints = value;
-        this.bar.beginFill(0x84F10F);
-
         let hpPortion = this.currentHitPoints / this.hitPoints;
+        let currentColor;
+        if (hpPortion < 1 && hpPortion >= 0.5) {
+            currentColor = 0x84F10F;
+        } else if (hpPortion < 0.5 && hpPortion >= 0.1) {
+            currentColor = 0xF18A0F;
+        } else {
+            currentColor = 0xE40000;
+        };
+
+        this.bar.beginFill(currentColor);
+
         (hpPortion < 0) && (hpPortion = 0);
 
         this.bar.drawPolygon([
@@ -39,7 +48,6 @@ export class HealthBar {
         this.bar.endFill();
     };
     setType(type) {
-        console.log(`settype : ${type}`);
         this.bar.position.x =
             (type === HeroType.Player)
                 ? this.ref.app.view.width / 27

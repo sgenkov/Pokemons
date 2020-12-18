@@ -20,25 +20,18 @@ export class SelectHeroScreen extends PIXI.Container {
         heroes.forEach(hero => {
             hero.showYourself(this, Math.random() * app.view.width, Math.random() * app.view.height);
         });
-        // app.stage.addChild(this.selectHeroScreen, this.battleScreen);
-        // app.ticker.start();
         this.previewHeroes(heroes);
-        // heroes.sort((a, b) => a.sprite.x - b.sprite.x)
         heroes.forEach((hero) => {
             hero.sprite.on("pointerdown", () => {
                 soundProvider.mainMenu.stop();
                 soundProvider.battleSound.play();
                 this.hideHeroes(heroes, app);
-                // this.playerHero = hero;
                 hero.heroType = HeroType.Player;
                 hero.setBattleMode(true);
-                // this.playerHero.heroType = HeroType.Player;
-                // this.playerHero.setBattleMode(true);
                 setTimeout(() => {
-                    this.visible = false; //    -\
-                    this.isCompleted = true; //   > ??? WHAT sequence ???
-                    this.clearContainer(); //   -/
-                    // this.readyForBattle();
+                    this.visible = false;
+                    this.isCompleted = true; 
+                    this.clearContainer();
                 }, 1500);
             });
             hero.sprite.on("pointerover", () => {

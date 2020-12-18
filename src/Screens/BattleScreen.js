@@ -30,11 +30,9 @@ export class BattleScreen extends PIXI.Container {
     
     readyForBattle(heroes) {
         this.playerHero = heroes.find((hero) => hero.heroType === HeroType.Player);
-        console.log(this.playerHero.name);
         heroes = heroes.filter(hero => hero.heroType !== HeroType.Player); // ??
         this.visible = true;
         this.selectOpponent(heroes);
-        // this.selectHeroScreen.visible = false;
         this.battle()
     };
 
@@ -49,10 +47,6 @@ export class BattleScreen extends PIXI.Container {
 
         const sequnce = this.determineSequence();
         const [fasterCreature, slowerCreature] = sequnce;
-        // if ( fasterCreature.heroType === HeroType.Player ) {
-        //     fasterCreature.sprite.x = 100;
-        //     fasterCreature.sprite.y = 100;
-        // }
         
         this.addChild(fasterCreature.sprite);
         this.addChild(slowerCreature.sprite);
@@ -97,7 +91,6 @@ export class BattleScreen extends PIXI.Container {
         });
 
         this.winnerText = this.winner;
-        // this.battleScreen.winnerText.visible = true;
 
         if (this.winner === 'You Win') {
             this.soundProvider.winBattle.play();
@@ -109,8 +102,9 @@ export class BattleScreen extends PIXI.Container {
         this.button.button.on("pointerdown", () => {
             this.isCompleted = true;
             this.visible = false;
+            this.soundProvider.loseBattle.stop();
+            this.soundProvider.winBattle.stop();
             this.clearContainer();
-            // this.newGame();
         });
     };
 
