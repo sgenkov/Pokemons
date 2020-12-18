@@ -30,6 +30,7 @@ export class Hero {
         this.sprite_back_default = PIXI.Sprite.from(ref.app.loader.resources[`${this.name}_back_default`].url);
         this.sprite = this.sprite_front_default;
         this.heroInfo = new HeroInfo(this.heroStats, ref);
+        this.timeline = gsap.timeline();
     };
     
 
@@ -127,8 +128,8 @@ export class Hero {
         Hero.appearancePosition.x += app.view.width / 11;
         return Hero.appearancePosition;
     };
-    async creatureAttackAnimation(timeline, app) {
-        await timeline.to(this.sprite, {
+    async creatureAttackAnimation(app) {
+        await this.timeline.to(this.sprite, {
             x: (this.heroType === HeroType.Player)
                 ? app.view.width * 17 / 20
                 : app.view.width * 4 / 20,
@@ -138,38 +139,12 @@ export class Hero {
         });
     };
 
-    async creatureBlinkAnimation(timeline) {
-        await timeline.to(this.sprite, {
+    async creatureBlinkAnimation() {
+        await this.timeline.to(this.sprite, {
             alpha: 0,
             duration: 0.1,
             repeat: 5,
             yoyo: true,
-        });
-    };
-
-    static previewHeroes(heroes) {
-        heroes.forEach(hero => {
-            gsap.to(hero.sprite, {
-                x: Math.floor(hero.appearance.x),
-                y:  Math.floor(hero.appearance.y),
-                duration: 1.0,
-                repeat: 0,
-                yoyo: false,
-                rotation: 2 * Math.PI,
-            });
-        })
-    };
-
-    static async hideHeroes(ref) {
-        ref.heroes.forEach(hero => {
-            gsap.to(hero.sprite, {
-                x: Math.random() * ref.app.view.width,
-                y: Math.random() * ref.app.view.height + ref.app.view.height + 100,
-                duration: 1.0,
-                repeat: 0,
-                yoyo: false,
-                rotation: 2 * Math.PI,
-            });
         });
     };
 

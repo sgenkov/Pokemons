@@ -39,6 +39,7 @@ export class HealthBar {
         this.bar.endFill();
     };
     setType(type) {
+        console.log(`settype : ${type}`);
         this.bar.position.x =
             (type === HeroType.Player)
                 ? this.ref.app.view.width / 27
