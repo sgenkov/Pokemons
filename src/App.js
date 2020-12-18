@@ -45,6 +45,7 @@ export class App {
         this.init(this.app);
     };
     async battle() {
+        
         const sequnce = this.determineSequence();
         const fasterCreature = sequnce[0];
         const slowerCreature = sequnce[1];

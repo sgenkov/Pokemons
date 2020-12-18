@@ -20,7 +20,7 @@ export class Hero {
         this.attack = heroStats.primaryStats.attack;
         this.hitPoints = heroStats.primaryStats.hp;
         this.currentHitPoints = this.hitPoints;
-        this.appearance = { ...Hero.getAppearancePosition(ref.app)};
+        this.appearance = { ...this.getAppearancePosition(ref.app)};
         this.heroType = HeroType.Not_selected;
         this.battleMode = false;
         this.healthBar = new HealthBar(this.hitPoints, this.currentHitPoints, ref);
@@ -118,7 +118,7 @@ export class Hero {
         };
     };
 
-    static getAppearancePosition(app) {
+    getAppearancePosition(app) {
         if (Hero.appearancePosition.x > app.view.width * 18 / 20) {
             Hero.appearancePosition.x = 0;
             Hero.appearancePosition.y += app.view.height * 3 / 20;
