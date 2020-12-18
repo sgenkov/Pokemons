@@ -127,9 +127,9 @@ export class Hero {
         Hero.appearancePosition.x += app.view.width / 11;
         return Hero.appearancePosition;
     };
-    static async creatureAttackAnimation(creature, timeline, app) {
-        await timeline.to(creature.sprite, {
-            x: (creature.heroType === HeroType.Player)
+    async creatureAttackAnimation(timeline, app) {
+        await timeline.to(this.sprite, {
+            x: (this.heroType === HeroType.Player)
                 ? app.view.width * 17 / 20
                 : app.view.width * 4 / 20,
             duration: 0.5,
@@ -138,8 +138,8 @@ export class Hero {
         });
     };
 
-    static async creatureBlinkAnimation(creature, timeline) {
-        await timeline.to(creature.sprite, {
+    async creatureBlinkAnimation(timeline) {
+        await timeline.to(this.sprite, {
             alpha: 0,
             duration: 0.1,
             repeat: 5,

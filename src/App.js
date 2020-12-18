@@ -57,7 +57,7 @@ export class App {
 
         while (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
             if (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
-                await Hero.creatureAttackAnimation(fasterCreature, this.timeline, this.app);
+                await fasterCreature.creatureAttackAnimation(this.timeline, this.app);
                 this.soundProvider.hitSound.play(); 
             } else {
                 break;
@@ -65,13 +65,13 @@ export class App {
             const fasterCreatureDamage = fasterCreature.attackEnemy(slowerCreature);
 
             if (slowerCreature.currentHitPoints > 0 && fasterCreatureDamage > 0 && fasterCreature.currentHitPoints > 0) {
-                await Hero.creatureBlinkAnimation(slowerCreature, this.timeline);
+                await slowerCreature.creatureBlinkAnimation(this.timeline);
             } else {
                 break;
             };
 
             if (slowerCreature.currentHitPoints > 0 && fasterCreature.currentHitPoints > 0) {
-                await Hero.creatureAttackAnimation(slowerCreature, this.timeline, this.app);
+                await slowerCreature.creatureAttackAnimation(this.timeline, this.app);
                 this.soundProvider.hitSound.play(); 
             } else {
                 break;
@@ -79,7 +79,7 @@ export class App {
             const slowerCreatureDamage = slowerCreature.attackEnemy(fasterCreature);
 
             if (fasterCreature.currentHitPoints > 0 && slowerCreatureDamage > 0 && slowerCreature.currentHitPoints > 0) {
-                await Hero.creatureBlinkAnimation(fasterCreature, this.timeline);
+                await fasterCreature.creatureBlinkAnimation(this.timeline);
             } else {
                 break;
             };

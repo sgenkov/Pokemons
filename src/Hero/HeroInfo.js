@@ -5,7 +5,7 @@ export class HeroInfo {
         this.sprite.scale.x = 4;
         this.sprite.scale.y = 4;
         this.sprite.x = ref.app.view.width / 3;
-        this.sprite.y = ref.app.view.height / 1.8;
+        this.sprite.y = ref.app.view.height / 1.6;
         this.sprite.anchor.set(0.5);
         this.sprite.visible = false;
         ref.selectHeroScreen.addChild(this.sprite);
@@ -22,10 +22,9 @@ export class HeroInfo {
         Special attack: ${heroInfo.primaryStats['special-attack']}
         Defense: ${heroInfo.primaryStats.defense}
         Attack: ${heroInfo.primaryStats.attack}
-        HP: ${heroInfo.primaryStats.hp}
-        Moral: ${heroInfo.primaryStats.moral}`);
+        HP: ${heroInfo.primaryStats.hp}`);
         this.info.x = ref.app.view.width / 1.8;
-        this.info.y = ref.app.view.height / 1.8;
+        this.info.y = ref.app.view.height / 1.6;
         this.info.anchor.set(0.5);
         this.info.visible = this._isVisible;
         ref.selectHeroScreen.addChild(this.info);

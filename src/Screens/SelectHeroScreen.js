@@ -10,9 +10,7 @@ export class SelectHeroScreen extends PIXI.Container {
         this.addChild(this.background);
     };
     clearContainer() {
-        while (this.children.length > 1) {
-            this.children.pop();
-        };
+        this.children.splice(1, this.children.length - 1);
     };
 
 };

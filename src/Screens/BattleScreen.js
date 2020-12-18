@@ -11,9 +11,7 @@ export class BattleScreen extends PIXI.Container {
     };
 
     clearContainer() {
-        while(this.children.length > 1) {
-            this.children.pop();
-        };
+        this.children.splice(1, this.children.length - 1);
     };
 
 };
