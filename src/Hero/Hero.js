@@ -7,18 +7,19 @@ import { HealthBar } from './HealthBar';
 export class Hero {
     static appearancePosition = { x: 0, y: 60 };
 
-    constructor(heroStats, ref) {
+    constructor(heroResource, ref) {
         this.ref = ref;
-        this.id = heroStats.id - 1;
-        this.name = heroStats.name;
-        this.ability = heroStats.ability;
-        this.moves = heroStats.moves;
-        this.speed = heroStats.primaryStats.speed;
-        this.special_defense = heroStats.primaryStats['special-defense'];
-        this.special_attack = heroStats.primaryStats['special-attack'];
-        this.defense = heroStats.primaryStats.defense;
-        this.attack = heroStats.primaryStats.attack;
-        this.hitPoints = heroStats.primaryStats.hp;
+        this.heroStats = this.getHeroStats(heroResource);
+        this.id = this.heroStats.id - 1;
+        this.name = this.heroStats.name;
+        this.ability = this.heroStats.ability;
+        this.moves = this.heroStats.moves;
+        this.speed = this.heroStats.primaryStats.speed;
+        this.special_defense = this.heroStats.primaryStats['special-defense'];
+        this.special_attack = this.heroStats.primaryStats['special-attack'];
+        this.defense = this.heroStats.primaryStats.defense;
+        this.attack = this.heroStats.primaryStats.attack;
+        this.hitPoints = this.heroStats.primaryStats.hp;
         this.currentHitPoints = this.hitPoints;
         this.appearance = { ...this.getAppearancePosition(ref.app)};
         this.heroType = HeroType.Not_selected;
@@ -28,7 +29,7 @@ export class Hero {
         this.sprite_front_default = PIXI.Sprite.from(ref.app.loader.resources[`${this.name}_front_default`].url);
         this.sprite_back_default = PIXI.Sprite.from(ref.app.loader.resources[`${this.name}_back_default`].url);
         this.sprite = this.sprite_front_default;
-        this.heroInfo = new HeroInfo(heroStats, ref);
+        this.heroInfo = new HeroInfo(this.heroStats, ref);
     };
     
 
@@ -95,7 +96,7 @@ export class Hero {
         };
     };
 
-    static getHeroStats(heroFullStack) {
+    getHeroStats(heroFullStack) {
         const id = heroFullStack.id;
         const ability = heroFullStack.abilities.find((ability) => {
             return ability.is_hidden === false;

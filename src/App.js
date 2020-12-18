@@ -26,7 +26,7 @@ export class App {
         this.winnerText.position.x = app.view.width / 2;
         this.winnerText.position.y = app.view.height / 3;
         this.winnerText.anchor.set(0.5);
-        this.heroes = resources.map(hero => new Hero(Hero.getHeroStats(hero), this));
+        this.heroes = resources.map(heroResource => new Hero(heroResource, this));
 
         this.soundProvider = new SoundProvider();
         this.soundProvider.mainMenu.play();
@@ -41,7 +41,7 @@ export class App {
         Hero.appearancePosition = { x: 0, y: 60 };
         this.battleScreen.clearContainer();
         this.selectHeroScreen.clearContainer();
-        this.heroes = this.resources.map(hero => new Hero(Hero.getHeroStats(hero), this));
+        this.heroes = this.resources.map(heroResource => new Hero(heroResource, this));
         this.init(this.app);
     };
     async battle() {
