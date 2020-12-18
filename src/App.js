@@ -16,16 +16,6 @@ export class App {
         this.battleScreen = new BattleScreen(app);
         this.battleScreen.visible = false;
 
-        this.winnerText = new PIXI.Text("default", {
-            fontSize: 100,
-            fill: 0x000000,
-            align: "center",
-            stroke: "#bbbbbb",
-            strokeThickness: 0,
-        });
-        this.winnerText.position.x = app.view.width / 2;
-        this.winnerText.position.y = app.view.height / 3;
-        this.winnerText.anchor.set(0.5);
         this.heroes = resources.map(heroResource => new Hero(heroResource, this));
 
         this.soundProvider = new SoundProvider();
@@ -35,6 +25,7 @@ export class App {
     };
 
     newGame() {
+        this.battleScreen.winnerText.visible = false;
         this.soundProvider.mainMenu.play();
         this.battleScreen.visible = false;
         this.selectHeroScreen.visible = true;
@@ -95,8 +86,9 @@ export class App {
             this.winner = this.determineWinner(fasterCreature);
         };
 
-        this.winnerText.text = this.winner;
-        this.battleScreen.addChild(this.winnerText);
+        this.battleScreen.winnerText.text = this.winner;
+        this.battleScreen.winnerText.visible = true;
+        
         if(this.winner === 'You Win') {
             this.soundProvider.winBattle.play(); 
         } else {
