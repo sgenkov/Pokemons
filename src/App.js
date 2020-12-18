@@ -24,8 +24,37 @@ export class App {
         this.init(app);
     };
 
+    init(app) {
+        this.heroes.forEach(hero => {
+            hero.showYourself(this.selectHeroScreen, Math.random() * app.view.width, Math.random() * app.view.height);
+        });
+        app.stage.addChild(this.selectHeroScreen, this.battleScreen);
+        app.ticker.start();
+        Hero.previewHeroes(this.heroes);
+        this.heroes.forEach((hero) => {
+            hero.sprite.on("pointerdown", () => {
+                this.soundProvider.mainMenu.stop();
+                this.soundProvider.battleSound.play();
+                Hero.hideHeroes(this);
+                this.playerHero = hero;
+                this.playerHero.heroType = HeroType.Player;
+                this.playerHero.setBattleMode(true);
+                setTimeout(() => {
+                    this.readyForBattle();
+                }, 1500);
+            });
+            hero.sprite.on("pointerover", () => {
+                hero.sprite.tint = 0x1AE8EA;
+                hero.heroInfo.toggleVisible();
+            });
+            hero.sprite.on("pointerout", () => {
+                hero.sprite.tint = 16777215;
+                hero.heroInfo.toggleVisible();
+            });
+        });
+    };
     newGame() {
-        this.battleScreen.winnerText.visible = false;
+        this.battleScreen.winnerText = " ";
         this.soundProvider.mainMenu.play();
         this.battleScreen.visible = false;
         this.selectHeroScreen.visible = true;
@@ -36,20 +65,15 @@ export class App {
         this.init(this.app);
     };
     async battle() {
-        
-        const sequnce = this.determineSequence();
-        const fasterCreature = sequnce[0];
-        const slowerCreature = sequnce[1];
-        this.battleScreen.addChild(fasterCreature.sprite);
-        this.battleScreen.addChild(slowerCreature.sprite);
-        this.battleScreen.addChild(fasterCreature.healthBar.bar); 
-        this.battleScreen.addChild(slowerCreature.healthBar.bar);
 
+        const sequnce = this.determineSequence();
+        const [fasterCreature, slowerCreature] = sequnce;
+        this.battleScreen.addChild(fasterCreature.sprite, slowerCreature.sprite, fasterCreature.healthBar.bar, slowerCreature.healthBar.bar);
 
         while (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
             if (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
                 await fasterCreature.creatureAttackAnimation(this.timeline, this.app);
-                this.soundProvider.hitSound.play(); 
+                this.soundProvider.hitSound.play();
             } else {
                 break;
             };
@@ -63,7 +87,7 @@ export class App {
 
             if (slowerCreature.currentHitPoints > 0 && fasterCreature.currentHitPoints > 0) {
                 await slowerCreature.creatureAttackAnimation(this.timeline, this.app);
-                this.soundProvider.hitSound.play(); 
+                this.soundProvider.hitSound.play();
             } else {
                 break;
             };
@@ -75,24 +99,21 @@ export class App {
                 break;
             };
         };
-        if (fasterCreature.currentHitPoints <= 0) {
-            this.soundProvider.battleSound.stop(); 
-            fasterCreature.sprite.tint = 0x000000;
-            this.winner = this.determineWinner(slowerCreature);
-        };
-        if (slowerCreature.currentHitPoints <= 0) {
-            this.soundProvider.battleSound.stop();
-            slowerCreature.sprite.tint = 0x000000;
-            this.winner = this.determineWinner(fasterCreature);
-        };
+        sequnce.forEach((creature) => {
+            if (creature.currentHitPoints <= 0) {
+                this.soundProvider.battleSound.stop();
+                creature.sprite.tint = 0x000000;
+                this.winner = this.determineWinner(creature);
+            };
+        });
 
-        this.battleScreen.winnerText.text = this.winner;
-        this.battleScreen.winnerText.visible = true;
-        
-        if(this.winner === 'You Win') {
-            this.soundProvider.winBattle.play(); 
+        this.battleScreen.winnerText = this.winner;
+        // this.battleScreen.winnerText.visible = true;
+
+        if (this.winner === 'You Win') {
+            this.soundProvider.winBattle.play();
         } else {
-            this.soundProvider.loseBattle.play(); 
+            this.soundProvider.loseBattle.play();
         };
 
         this.button = new Button(this.app, this.battleScreen);
@@ -102,7 +123,7 @@ export class App {
     };
 
     determineWinner(creature) {
-        return (creature.heroType === HeroType.Player) ? 'You Win' : 'You Lose';
+        return (creature.heroType === HeroType.Opponent) ? 'You Win' : 'You Lose';
     };
 
     determineSequence() {
@@ -128,34 +149,6 @@ export class App {
         this.battleScreen.visible = true;
         this.battle()
     };
-    async init(app) {
-        await this.heroes.forEach(hero => {
-            hero.showYourself(this.selectHeroScreen, Math.random() * app.view.width, Math.random() * app.view.height);
-        });
-        app.stage.addChild(this.selectHeroScreen, this.battleScreen);
-        app.ticker.start();
-        Hero.previewHeroes(this.heroes);
-        this.heroes.forEach((hero) => {
-            hero.sprite.on("pointerdown", () => {
-                this.soundProvider.mainMenu.stop();  
-                this.soundProvider.battleSound.play();  
-                Hero.hideHeroes(this);
-                this.playerHero = hero;
-                this.playerHero.heroType = HeroType.Player;
-                this.playerHero.setBattleMode(true);
-                setTimeout(() => {
-                    this.readyForBattle();
-                }, 1500);
-            });
-            hero.sprite.on("pointerover", () => {
-                hero.sprite.tint = 0x1AE8EA;
-                hero.heroInfo.toggleVisible();
-            });
-            hero.sprite.on("pointerout", () => {
-                hero.sprite.tint = 16777215;
-                hero.heroInfo.toggleVisible();
-            });
-        })
-    };
+    
 
 };

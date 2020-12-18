@@ -13,4 +13,6 @@ export class SelectHeroScreen extends PIXI.Container {
         this.children.splice(1, this.children.length - 1);
     };
 
+    
+
 };
