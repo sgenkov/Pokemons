@@ -30,7 +30,7 @@ export class BattleScreen extends PIXI.Container {
     
     readyForBattle(heroes) {
         this.playerHero = heroes.find((hero) => hero.heroType === HeroType.Player);
-        heroes = heroes.filter(hero => hero.heroType !== HeroType.Player); // ??
+        heroes = heroes.filter(hero => hero.heroType !== HeroType.Player); 
         this.visible = true;
         this.selectOpponent(heroes);
         this.battle()
@@ -44,14 +44,10 @@ export class BattleScreen extends PIXI.Container {
     };
 
     async battle() {
-
         const sequnce = this.determineSequence();
         const [fasterCreature, slowerCreature] = sequnce;
         
-        this.addChild(fasterCreature.sprite);
-        this.addChild(slowerCreature.sprite);
-        this.addChild(fasterCreature.healthBar.bar);
-        this.addChild(slowerCreature.healthBar.bar);
+        this.addChild(fasterCreature.sprite, slowerCreature.sprite, fasterCreature.healthBar.bar, slowerCreature.healthBar.bar);
 
         while (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
             if (fasterCreature.currentHitPoints > 0 && slowerCreature.currentHitPoints > 0) {
@@ -60,6 +56,7 @@ export class BattleScreen extends PIXI.Container {
             } else {
                 break;
             };
+
             const fasterCreatureDamage = fasterCreature.attackEnemy(slowerCreature);
 
             if (slowerCreature.currentHitPoints > 0 && fasterCreatureDamage > 0 && fasterCreature.currentHitPoints > 0) {
@@ -74,6 +71,7 @@ export class BattleScreen extends PIXI.Container {
             } else {
                 break;
             };
+            
             const slowerCreatureDamage = slowerCreature.attackEnemy(fasterCreature);
 
             if (fasterCreature.currentHitPoints > 0 && slowerCreatureDamage > 0 && slowerCreature.currentHitPoints > 0) {

@@ -3,8 +3,8 @@ export class Button {
     constructor(app, container) {
         this.container = container;
         this.button = new PIXI.Graphics();
-        this.button.beginFill(0xff0000);
-        this.button.lineStyle(5, 0x00ff00);
+        this.button.beginFill(0xFFEB00);
+        this.button.lineStyle(5, 0xFFBD00);
         this.button.drawRect(app.view.width / 2 - 90, app.view.height / 2 - 40, 180, 80);
         this.button.endFill();
 

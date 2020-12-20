@@ -2,7 +2,6 @@ import { Hero } from './Hero/Hero';
 import { SoundProvider } from './Utils/SoundProvider';
 import { SelectHeroScreen } from './Screens/SelectHeroScreen';
 import { BattleScreen } from './Screens/BattleScreen';
-import { HeroType } from './Hero/HeroType';
 
 export class App {
     constructor(app, resources) {
@@ -45,14 +44,7 @@ export class App {
             && this.selectHeroScreen.isCompleted 
             && this.battleScreen.isCompleted) {
             this.newGame();
-        }
-    };
-    readyForBattle() {
-        this.heroes = this.heroes.filter(hero => hero.heroType !== HeroType.Player);
-        this.selectOpponent();
-        this.selectHeroScreen.visible = false;
-        this.battleScreen.visible = true;
-        this.battle()
+        };
     };
 
     newGame() {
